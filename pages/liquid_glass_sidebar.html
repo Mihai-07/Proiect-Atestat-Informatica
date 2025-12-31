@@ -1,0 +1,26 @@
+<style>
+/* Main sidebar container */
+[data-testid="stSidebar"] {
+    background: rgba(255, 255, 255, 0.03);  /* foarte transparent */
+    backdrop-filter: blur(5px);            /* frosted glass blur */
+    border-radius: 20px;                     /* colțuri rotunjite */
+    padding: 20px;                           /* spațiu interior */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); /* umbră subtilă */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* contur foarte subtil */
+}
+
+/* Optional: customize scrollbar */
+[data-testid="stSidebar"]::-webkit-scrollbar {
+    width: 8px;
+}
+[data-testid="stSidebar"]::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+/* Sidebar title text */
+[data-testid="stSidebar"] h2, 
+[data-testid="stSidebar"] h3 {
+    color: white;
+}
+</style>
