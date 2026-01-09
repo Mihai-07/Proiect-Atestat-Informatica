@@ -7,11 +7,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 img_path = BASE_DIR / "images" / "nn.png"
 img = Image.open(img_path)
 
-# Configurarea paginii
-st.set_page_config(layout="wide")
+# Sidebar glass morphism - cached pentru a evita flickering
+@st.cache_data
+def load_sidebar_html():
+    with open("liquid_glass_sidebar.html", "r") as file:
+        return file.read()
 
-st.markdown(
-    """
+# CSS pentru header/footer - cached pentru a evita flickering
+@st.cache_data
+def get_header_footer_css():
+    return """
     <style>
     /* Header transparent și fără fundal */
     header[data-testid="stHeader"] {
@@ -49,22 +54,12 @@ st.markdown(
         border: 1px solid rgba(255, 255, 255, 0.08);
     }
     </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# Sidebar
-with open("liquid_glass_sidebar.html", "r") as file:
-    css_liquid_sidebar = file.read()
-
-st.markdown(
-    body=css_liquid_sidebar,
-    unsafe_allow_html=True
-)
-
-# Fundal + fade-in global
-st.markdown(
     """
+
+# CSS pentru background - cached pentru a evita flickering
+@st.cache_data
+def get_background_css():
+    return """
     <style>
     /* Fundal */
     .stApp {
@@ -101,9 +96,18 @@ st.markdown(
         }
     }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+    """
+
+css_liquid_sidebar = load_sidebar_html()
+css_header_footer = get_header_footer_css()
+css_background = get_background_css()
+
+# Configurarea paginii
+st.set_page_config(layout="wide")
+
+st.markdown(css_header_footer, unsafe_allow_html=True)
+st.markdown(body=css_liquid_sidebar, unsafe_allow_html=True)
+st.markdown(css_background, unsafe_allow_html=True)
 
 # Titlu
 title = "5. Era rețelelor neuronale profunde (2012-2020)"

@@ -1,10 +1,15 @@
 import streamlit as st
 
-# Configurare pagină
-st.set_page_config(layout="wide")
+# Sidebar glass morphism - cached pentru a evita flickering
+@st.cache_data
+def load_sidebar_html():
+    with open("liquid_glass_sidebar.html", "r") as file:
+        return file.read()
 
-st.markdown(
-    """
+# CSS pentru header/footer - cached pentru a evita flickering
+@st.cache_data
+def get_header_footer_css():
+    return """
     <style>
     /* Header transparent și fără fundal */
     header[data-testid="stHeader"] {
@@ -42,18 +47,60 @@ st.markdown(
         border: 1px solid rgba(255, 255, 255, 0.08);
     }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+    """
 
-# Sidebar glass morphism
-with open("liquid_glass_sidebar.html", "r") as file:
-    css_liquid_sidebar = file.read()
+# CSS pentru background - cached pentru a evita flickering
+@st.cache_data
+def get_background_css():
+    return """
+    <style>
+    /* Fundal */
+    .stApp {
+        background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                          url("https://img.freepik.com/free-vector/gradient-speed-motion-background_52683-63639.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: white;
+        font-family: 'Inter', sans-serif;
+    }
 
-st.markdown(
-    body=css_liquid_sidebar,
-    unsafe_allow_html=True
-)
+    /* FADE-IN global */
+    .stApp > div {
+        opacity: 0;
+        animation: fadeUp 1.2s ease forwards;
+        animation-delay: 0.3s;
+    }
+
+    /* Ajustări text */
+    .stMarkdown p {
+        font-size: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    </style>
+    """
+
+css_liquid_sidebar = load_sidebar_html()
+css_header_footer = get_header_footer_css()
+css_background = get_background_css()
+
+# Configurare pagină
+st.set_page_config(layout="wide")
+
+st.markdown(css_header_footer, unsafe_allow_html=True)
+st.markdown(body=css_liquid_sidebar, unsafe_allow_html=True)
+st.markdown(css_background, unsafe_allow_html=True)
 
 # Fundal + FADE-IN GLOBAL
 st.markdown(

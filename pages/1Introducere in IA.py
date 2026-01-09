@@ -9,14 +9,16 @@ img_path = BASE_DIR / "images" / "intro_to_AI.png"
 # Încarcă imaginea
 img = Image.open(img_path)
 
-# Setare pagină și sidebar
-with open("liquid_glass_sidebar.html", "r") as file:
-    css_liquid_sidebar = file.read()
+# Setare pagină și sidebar - cached pentru a evita flickering
+@st.cache_data
+def load_sidebar_html():
+    with open("liquid_glass_sidebar.html", "r") as file:
+        return file.read()
 
-st.set_page_config(layout="wide")
-
-st.markdown(
-    """
+# CSS pentru header/footer - cached pentru a evita flickering
+@st.cache_data
+def get_header_footer_css():
+    return """
     <style>
     /* Header transparent și fără fundal */
     header[data-testid="stHeader"] {
@@ -54,18 +56,12 @@ st.markdown(
         border: 1px solid rgba(255, 255, 255, 0.08);
     }
     </style>
-    """,
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    body=css_liquid_sidebar,
-    unsafe_allow_html=True
-)
-
-# CSS pentru fundal și efectul de fade-in
-st.markdown(
     """
+
+# CSS pentru background - cached pentru a evita flickering
+@st.cache_data
+def get_background_css():
+    return """
     <style>
     /* Fundal */
     .stApp {
@@ -102,9 +98,17 @@ st.markdown(
         }
     }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+    """
+
+css_liquid_sidebar = load_sidebar_html()
+css_header_footer = get_header_footer_css()
+css_background = get_background_css()
+
+st.set_page_config(layout="wide")
+
+st.markdown(css_header_footer, unsafe_allow_html=True)
+st.markdown(body=css_liquid_sidebar, unsafe_allow_html=True)
+st.markdown(css_background, unsafe_allow_html=True)
 
 # Titlu
 title = "1. Introducere în Inteligența Artificială"
