@@ -1,5 +1,11 @@
 import streamlit as st
 
+# Citim secretele pentru header și footer
+header_text = st.secrets["header"]["header"]
+footer_left = st.secrets["footer"]["footer_left"]
+footer_right = st.secrets["footer"]["footer_right"]
+footer_center = st.secrets["footer"]["footer_center"]
+
 # Sidebar glass morphism - cached pentru a evita flickering
 @st.cache_data
 def load_sidebar_html():
@@ -152,8 +158,93 @@ st.markdown(
         font-weight: 400;
         opacity: 0.9;
     }
-    </style>
 
+    /* CUSTOM HEADER - Complet Transparent */
+    .custom-header {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        padding: 1rem 2rem;
+        text-align: center;
+        background: transparent;
+        color: white;
+        font-family: 'Inter', sans-serif;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        white-space: pre-line;
+        opacity: 0;
+        animation: fadeUp 1.2s ease forwards;
+        animation-delay: 0.5s;
+    }
+
+    /* CUSTOM FOOTER - Complet Transparent */
+    .custom-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        padding: 1.5rem 2rem 2rem;
+        background: transparent;
+        color: white;
+        font-family: 'Inter', sans-serif;
+        opacity: 0;
+        animation: fadeUp 1.2s ease forwards;
+        animation-delay: 0.6s;
+    }
+
+    .footer-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        gap: 2rem;
+    }
+
+    .footer-left, .footer-right {
+        flex: 1;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        white-space: pre-line;
+    }
+
+    .footer-left {
+        text-align: left;
+    }
+
+    .footer-right {
+        text-align: right;
+    }
+
+    .footer-center {
+        text-align: center;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        opacity: 0.85;
+        padding-top: 0.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        white-space: pre-line;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Header customizat
+st.markdown(
+    f"""
+    <div class="custom-header">
+        {header_text}
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# Hero section
+st.markdown(
+    """
     <div class="hero">
         <div class="hero-content">
             <div class="hero-title">
@@ -162,6 +253,26 @@ st.markdown(
             <div class="hero-subtitle">
                 De la primele modele la agenți moderni
             </div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# Footer customizat
+st.markdown(
+    f"""
+    <div class="custom-footer">
+        <div class="footer-top">
+            <div class="footer-left">
+                {footer_left}
+            </div>
+            <div class="footer-right">
+                {footer_right}
+            </div>
+        </div>
+        <div class="footer-center">
+            {footer_center}
         </div>
     </div>
     """,
